@@ -20,8 +20,9 @@ def get_zillow_data(use_cache=True):
     query = '''
     SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt, yearbuilt, taxamount, fips
     FROM properties_2017
+    JOIN predictions_2017 USING(parcelid)
     LEFT JOIN propertylandusetype USING(propertylandusetypeid)
-    WHERE propertylandusedesc IN ("Single Family Residential", "Inferred Single Family Residential");
+    WHERE propertylandusedesc IN ("Single Family Residential", "Inferred Single Family Residential") AND transactiondate LIKE " 2017%%";
     '''
     df = pd.read_sql(query, database_url_base + 'zillow')
     df.to_csv('zillow.csv', index=False)
