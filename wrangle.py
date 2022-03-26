@@ -18,7 +18,7 @@ def get_zillow_data(use_cache=True):
 
     database_url_base = f'mysql+pymysql://{username}:{password}@{host}/'
     query = '''
-SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt, yearbuilt, taxamount, fips
+SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, lotsizesquarefeet, taxvaluedollarcnt, yearbuilt, fips
 FROM properties_2017
 JOIN predictions_2017 USING(parcelid)
 LEFT JOIN propertylandusetype USING(propertylandusetypeid)
@@ -28,6 +28,25 @@ WHERE propertylandusedesc IN ("Single Family Residential", "Inferred Single Fami
     df.to_csv('zillow.csv', index=False)
     return df
 
+### a function that will be needed in the clean_zillow_data to remove outliers
+def remove_outliers(df, k, col_list):
+    ''' this function take in a dataframe, k value, and specified columns 
+    within a dataframe and then return the dataframe with outliers removed
+    '''
+    for col in col_list:
+
+        q1, q3 = df[col].quantile([.25, .75])  # get quartiles
+        
+        iqr = q3 - q1   # calculate interquartile range
+        
+        upper_bound = q3 + k * iqr   # get upper bound
+        lower_bound = q1 - k * iqr   # get lower bound
+
+        # return dataframe without outliers
+        
+        df = df[(df[col] > lower_bound) & (df[col] < upper_bound)]
+        
+    return df
 
 def clean_zillow_data():
     '''This function will take in the acquired data and clean it by replacing any white spaces
@@ -38,18 +57,37 @@ def clean_zillow_data():
     df = df.rename( columns = {'bedroomcnt': 'bedroom',
                            'bathroomcnt': 'bathroom',
                            'calculatedfinishedsquarefeet':'square_ft',
+                           'lotsizesquarefeet': 'lot_size',
                            'taxvaluedollarcnt': 'tax_value',
-                           'yearbuilt': 'year_built',
-                          'taxamount':'tax'})
+                           'yearbuilt': 'year_built'
+                           })
 
     # clean all values and replace any missing
     df= df.replace(r'^\s*$', np.nan, regex = True)
 
-    # drop all null values from df and confirm
-    df = df.dropna()
+    # create column that shows age values calulated from the yearbuilt column
+    df['age'] = 2022 - df.year_built
 
-    # change all dtype to integer from floats
-    df = df.astype('int')
+    # replace fips values with locations
+    df.fips = df.fips.replace({6037: 'los_angeles', 6059: 'orange', 6111: 'ventura'})
+
+    # change type for strings
+    df.fips.astype('object')
+
+    # drop all null values from df 
+    df = df.dropna()
+    
+    # creat dummy columns for fips so it will be easier to evaluate later
+    dummy_df = pd.get_dummies(df['fips'])
+    df = pd.concat([df, dummy_df], axis = 1)
+
+    # remove outliers to something more reasonable
+    df =remove_outliers(df, 1.5, ['bedroom', 'bathroom', 'square_ft', 'tax_value', 'age', 'year_built'])
+    # change dtypes for certain columns
+    int_col = ['bedroom', 'bathroom', 'square_ft', 'tax_value', 'age']
+    for col in df:
+        if col in int_col:
+            df[col] = df[col].astype(int)
 
     return df
 
