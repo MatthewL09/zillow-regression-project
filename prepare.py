@@ -2,31 +2,8 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
-
+import acquire
 from env import username, password, host
-
-
-def get_zillow_data(use_cache=True):
-    '''This function returns the data from the zillow database in Codeup Data Science Database. 
-    In my SQL query I have joined all necessary tables together, so that the resulting dataframe contains all the 
-    information that is needed
-    '''
-    if os.path.exists('zillow.csv') and use_cache:
-        print('Using cached csv')
-        return pd.read_csv('zillow.csv')
-    print('Acquiring data from SQL database')
-
-    database_url_base = f'mysql+pymysql://{username}:{password}@{host}/'
-    query = '''
-SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, lotsizesquarefeet, taxvaluedollarcnt, yearbuilt, fips
-FROM properties_2017
-JOIN predictions_2017 USING(parcelid)
-LEFT JOIN propertylandusetype USING(propertylandusetypeid)
-WHERE propertylandusedesc IN ("Single Family Residential", "Inferred Single Family Residential") AND transactiondate LIKE '2017%%';
-    '''
-    df = pd.read_sql(query, database_url_base + 'zillow')
-    df.to_csv('zillow.csv', index=False)
-    return df
 
 ### a function that will be needed in the clean_zillow_data to remove outliers
 def remove_outliers(df, k, col_list):
@@ -53,36 +30,38 @@ def clean_zillow_data():
     dropping any null values and renaming columns for better readability
     '''
 
-    df = get_zillow_data()
+    df = acquire.get_zillow_data()
     df = df.rename( columns = {'bedroomcnt': 'bedroom',
                            'bathroomcnt': 'bathroom',
                            'calculatedfinishedsquarefeet':'square_ft',
                            'lotsizesquarefeet': 'lot_size',
                            'taxvaluedollarcnt': 'tax_value',
-                           'yearbuilt': 'year_built'
+                           'yearbuilt': 'year_built',
+                           'fips': 'county'
                            })
 
     # clean all values and replace any missing
     df= df.replace(r'^\s*$', np.nan, regex = True)
 
     # create column that shows age values calulated from the yearbuilt column
-    df['age'] = 2022 - df.year_built
+    df['age'] = 2017 - df.year_built
 
     # replace fips values with locations
-    df.fips = df.fips.replace({6037: 'los_angeles', 6059: 'orange', 6111: 'ventura'})
+    df.county = df.county.replace({6037: 'los_angeles', 6059: 'orange', 6111: 'ventura'})
 
     # change type for strings
-    df.fips.astype('object')
+   
 
     # drop all null values from df 
     df = df.dropna()
     
     # creat dummy columns for fips so it will be easier to evaluate later
-    dummy_df = pd.get_dummies(df['fips'])
+    dummy_df = pd.get_dummies(df['county'])
     df = pd.concat([df, dummy_df], axis = 1)
 
+
     # remove outliers to something more reasonable
-    df =remove_outliers(df, 1.5, ['bedroom', 'bathroom', 'square_ft', 'lot_size', 'tax_value', 'age', 'year_built'])
+    df =remove_outliers(df, 3.0, ['bedroom', 'bathroom', 'square_ft', 'lot_size', 'tax_value', 'age'])
     # change dtypes for certain columns
     int_col = ['bedroom', 'bathroom', 'square_ft', 'tax_value', 'age']
     for col in df:
@@ -90,6 +69,30 @@ def clean_zillow_data():
             df[col] = df[col].astype(int)
 
     return df
+
+def scale_data(train, validate, test, return_scaler=False):
+    '''
+    Scales the 3 data splits. using the MinMaxScaler()
+    takes in the train, validate, and test data splits and returns their scaled counterparts.
+    If return_scaler is true, the scaler object will be returned as well.
+    '''
+    columns_to_scale = ['bedroom', 'bathroom', 'square_ft', 'lot_size', 'age']
+    
+    train_scaled = train.copy()
+    validate_scaled = validate.copy()
+    test_scaled = test.copy()
+    
+    scaler = MinMaxScaler()
+    scaler.fit(train[columns_to_scale])
+    
+    train_scaled[columns_to_scale] = scaler.transform(train[columns_to_scale])
+    validate_scaled[columns_to_scale] = scaler.transform(validate[columns_to_scale])
+    test_scaled[columns_to_scale] = scaler.transform(test[columns_to_scale])
+    
+    if return_scaler:
+        return scaler, train_scaled, validate_scaled, test_scaled
+    else:
+        return train_scaled, validate_scaled, test_scaled
 
 def split_data(df):
     ''' This function will take in the data and split it into train, validate, and test datasets for modeling, evaluating, and testing
