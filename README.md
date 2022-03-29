@@ -6,7 +6,7 @@ PROJECT DETAILS FOR ZILLOW DATASET
     - Find key drivers of property value for single family properties.
 
 2. Project Description
-    - Zillow is looking to imporve their current model for predicting single family property tax values. I have been tasked with providing insights on new, potentially unseen, features that can improve model performance.
+    - Zillow is looking to improve their current model for predicting single family property tax values. I have been tasked with providing insights on new, potentially unseen, features that can improve model performance.
 
 3. Initial Hypothesis/Questions
 
