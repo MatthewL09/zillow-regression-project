@@ -105,6 +105,22 @@ def split_data(df):
 
     return train, validate, test
 
+def create_x_y(train, validate, test, train_scaled, validate_scaled, test_scaled):
+    ''' create X and y versions of split data and
+        X and y of scaled data
+    '''
+    X_train = train_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura'])
+    y_train = pd.DataFrame(train.tax_value)
+
+    X_validate = validate_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura'])
+    y_validate = pd.DataFrame(validate.tax_value)
+
+    X_test = test_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura'])
+    y_test = pd.DataFrame(test.tax_value)
+
+    return X_train, y_train, X_validate, y_validate, X_test, y_test
+
+
 def wrangle_zillow():
     ''' This function combines both functions above and outputs three cleaned and prepped datasets
     '''
