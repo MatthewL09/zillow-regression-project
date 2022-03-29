@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 import acquire
 from env import username, password, host
 
@@ -108,6 +109,9 @@ def wrangle_zillow():
     ''' This function combines both functions above and outputs three cleaned and prepped datasets
     '''
     clean_df = clean_zillow_data()
+
     train, validate, test = split_data(clean_df)
 
-    return train, validate, test
+    train_scaled, validate_scaled, test_scaled = scale_data(train, validate, test, return_scaler=False)
+
+    return train, validate, test, train_scaled, validate_scaled, test_scaled
