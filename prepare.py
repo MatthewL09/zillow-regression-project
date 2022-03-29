@@ -40,8 +40,12 @@ def clean_zillow_data():
                            'fips': 'county'
                            })
 
+
     # clean all values and replace any missing
     df= df.replace(r'^\s*$', np.nan, regex = True)
+
+    # drop all null values from df 
+    df = df.dropna()
 
     # create column that shows age values calulated from the yearbuilt column
     df['age'] = 2017 - df.year_built
@@ -51,9 +55,6 @@ def clean_zillow_data():
 
     # change type for strings
    
-
-    # drop all null values from df 
-    df = df.dropna()
     
     # creat dummy columns for fips so it will be easier to evaluate later
     dummy_df = pd.get_dummies(df['county'])
