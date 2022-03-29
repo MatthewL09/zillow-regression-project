@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
@@ -120,6 +122,16 @@ def create_x_y(train, validate, test, train_scaled, validate_scaled, test_scaled
 
     return X_train, y_train, X_validate, y_validate, X_test, y_test
 
+
+def plot_residuals(actual, predicted):
+    plt.figure(figsize = (10,8))
+    residuals = actual - predicted
+    plt.hlines(0, actual.min(), actual.max(), ls=':', color ='red')
+    sns.scatterplot(actual, residuals, marker = '+')
+    plt.ylabel('residual ($y - \hat{y}$)')
+    plt.xlabel('actual value ($y$)')
+    plt.title('Actual vs Residual')
+    plt.show()
 
 def wrangle_zillow():
     ''' This function combines both functions above and outputs three cleaned and prepped datasets
