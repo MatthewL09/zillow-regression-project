@@ -6,12 +6,14 @@ PROJECT DETAILS FOR ZILLOW DATASET
     - Find key drivers of property value for single family properties.
 
 2. Project Description
-    - Zillow is looking to improve their current model for predicting single family property tax values. I have been tasked with providing insights on new, potentially unseen, features that can improve model performance.
+    - Zillow is looking to improve their current model for predicting single family property tax values. 
+    - I have been tasked with providing insights on new, potentially unseen, features that can improve model performance.
 
-3. Initial Hypothesis/Questions
+3. Initial Questions/Hypothesis
 
     - Does location affect tax value?
-    - does square footage affect tax value?
+    - Does square footage affect tax value?
+    - Does lot size affect tax value?
     - Does bedroom count affect tax value?
     - Does bathroom count affect tax value?
 
@@ -57,7 +59,7 @@ PROJECT DETAILS FOR ZILLOW DATASET
         - convert data types
         - encode categorical columns
         - renames columns
-        - creates a columns for house 'age'
+        - created a columns for house 'age'
         - scale data for exploration
     - Create a function that splits the data into 3 sets. train, validate, test
         - Split 20% (test data), 24% (validate data), and 56%(test data)

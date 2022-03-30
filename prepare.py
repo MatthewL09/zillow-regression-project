@@ -53,10 +53,12 @@ def clean_zillow_data():
     # create column that shows age values calulated from the yearbuilt column
     df['age'] = 2017 - df.year_built
 
+    # Create column for the state of county
+    df['state'] = 'california'
+
     # replace fips values with locations
     df.county = df.county.replace({6037: 'los_angeles', 6059: 'orange', 6111: 'ventura'})
 
-    # change type for strings
    
     
     # creat dummy columns for fips so it will be easier to evaluate later
@@ -111,13 +113,13 @@ def create_x_y(train, validate, test, train_scaled, validate_scaled, test_scaled
     ''' create X and y versions of split data and
         X and y of scaled data
     '''
-    X_train = train_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura'])
+    X_train = train_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura', 'state'])
     y_train = pd.DataFrame(train.tax_value)
 
-    X_validate = validate_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura'])
+    X_validate = validate_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura', 'state'])
     y_validate = pd.DataFrame(validate.tax_value)
 
-    X_test = test_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura'])
+    X_test = test_scaled.drop(columns=['tax_value','county','los_angeles','orange','ventura', 'state'])
     y_test = pd.DataFrame(test.tax_value)
 
     return X_train, y_train, X_validate, y_validate, X_test, y_test
