@@ -34,7 +34,7 @@ PROJECT DETAILS FOR ZILLOW DATASET
 
 5. Project Planning
 
-    Recreate the plan by following these steps
+    - Recreate the plan by following these steps
     
     Planning 
     - Define goals
@@ -42,15 +42,14 @@ PROJECT DETAILS FOR ZILLOW DATASET
     - Ask questions / formulate hypotheses
     - Determine audience and deliver format
 
-Acquisition
-
+    Acquisition
     - Create a function that establishes connection to the zillow_db
     - Create a function that holds your SQL query and reads the results
     - Create a function for caching data and stores as .csv for ease
     - Create and save in acquire.py so functions can be imports
     - Test functions
 
-Preparation
+    Preparation
     - Create a function thatpreps the acquired data
     - This function will:
         - remove duplicates
