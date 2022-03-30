@@ -64,21 +64,21 @@ PROJECT DETAILS FOR ZILLOW DATASET
     - Create functions and save in prepare.py to be easily imported
     - Test functions
 
-Exploration 
+    Exploration 
     - Use initial questions to guide the exploration process
     - Create visualizations of data
     - Statistical analysis to confirm or deny hypothesis
     - Save work with notations in zillow_work.ipynb
     - Document answers to questions as Takeaways
 
-Model
+    Model
     - The baseline and 4 different models were created
         - Linear Regression (OLS)
         - LassoLars alpha = 1
         - TweedieRegressor (GLM) power = 1
         - 3rd degree Polynomial Regression
 
-Delivery
+    Delivery
     - Report is saved in Jupyter Notebook
     -  Presented via Zoom
     - The audience is the data science team at Zillow
