@@ -34,9 +34,9 @@ PROJECT DETAILS FOR ZILLOW DATASET
 
 5. Project Planning
 
-Recreate the plan by following these steps
+    Recreate the plan by following these steps
     
-Planning 
+    Planning 
     - Define goals
     - What is my MVP?
     - Ask questions / formulate hypotheses
@@ -44,63 +44,63 @@ Planning
 
 Acquisition
 
-- Create a function that establishes connection to the zillow_db
-- Create a function that holds your SQL query and reads the results
-- Create a function for caching data and stores as .csv for ease
-- Create and save in acquire.py so functions can be imports
-- Test functions
+    - Create a function that establishes connection to the zillow_db
+    - Create a function that holds your SQL query and reads the results
+    - Create a function for caching data and stores as .csv for ease
+    - Create and save in acquire.py so functions can be imports
+    - Test functions
 
 Preparation
-- Create a function thatpreps the acquired data
-- This function will:
-    - remove duplicates
-    - remove empty values
-    - convert data types
-    - encode categorical columns
-    - renames columns
-    - creates a columns for house 'age'
-    - scale data for exploration
-- Create a function that splits the data into 3 sets. train, validate, test
-    - Split 20% (test data), 24% (validate data), and 56%(test data)
-- Create functions and save in prepare.py to be easily imported
-- Test functions
+    - Create a function thatpreps the acquired data
+    - This function will:
+        - remove duplicates
+        - remove empty values
+        - convert data types
+        - encode categorical columns
+        - renames columns
+        - creates a columns for house 'age'
+        - scale data for exploration
+    - Create a function that splits the data into 3 sets. train, validate, test
+        - Split 20% (test data), 24% (validate data), and 56%(test data)
+    - Create functions and save in prepare.py to be easily imported
+    - Test functions
 
 Exploration 
-- Use initial questions to guide the exploration process
-- Create visualizations of data
-- Statistical analysis to confirm or deny hypothesis
-- Save work with notations in zillow_work.ipynb
-- Document answers to questions as Takeaways
+    - Use initial questions to guide the exploration process
+    - Create visualizations of data
+    - Statistical analysis to confirm or deny hypothesis
+    - Save work with notations in zillow_work.ipynb
+    - Document answers to questions as Takeaways
 
 Model
-- The baseline and 4 different models were created
-    - Linear Regression (OLS)
-    - LassoLars alpha = 1
-    - TweedieRegressor (GLM) power = 1
-    - 3rd degree Polynomial Regression
+    - The baseline and 4 different models were created
+        - Linear Regression (OLS)
+        - LassoLars alpha = 1
+        - TweedieRegressor (GLM) power = 1
+        - 3rd degree Polynomial Regression
 
 Delivery
-- Report is saved in Jupyter Notebook
--  Presented via Zoom
-- The audience is the data science team at Zillow
+    - Report is saved in Jupyter Notebook
+    -  Presented via Zoom
+    - The audience is the data science team at Zillow
 
 6. Recreation of Project:
--You will need an env file with database credentials saved to your working directory
-    - database credentials (username, password, hostname)
-- Create a gitignore with env file inside to prevent sharing of credentials
-- Download the acquire.py and prepare.py files to working directory
-- Create a final notebook to your working directory
-- Review this README.md
-- Libraries used are pandas, numpy, matplotlib, Scipy, sklearn, seaborn
-- Run zillow_final.ipynb
+    - You will need an env file with database credentials saved to your working directory
+        - database credentials (username, password, hostname)
+    - Create a gitignore with env file inside to prevent sharing of credentials
+    - Download the acquire.py and prepare.py files to working directory
+    - Create a final notebook to your working directory
+    - Review this README.md
+    - Libraries used are pandas, numpy, matplotlib, Scipy, sklearn, seaborn
+    - Run zillow_final.ipynb
 
 7. Key Findings and takeaways
-- 3rd degree Polynomial Regression was the top performing model
-- RMSE of 260,182.52 outperformed the baseline RMSE of 316,189.34
-    - Residual difference of 56,006.82 
-- Identified drivers of tax value as:
-    - Home square footage
-    - Number of bedrooms
-    - Number of bathrooms
-    - Lot size
-- More time is needed for increased column selection, better feature engineering, and increased model performance
+    - 3rd degree Polynomial Regression was the top performing model
+    - RMSE of 260,182.52 outperformed the baseline RMSE of 316,189.34
+        - Residual difference of 56,006.82 
+    - Identified drivers of tax value as:
+        - Home square footage
+        - Number of bedrooms
+        - Number of bathrooms
+        - Lot size
+    - More time is needed for increased column selection, better feature engineering, and increased model performance
