@@ -26,7 +26,11 @@ PROJECT DETAILS FOR ZILLOW DATASET
     year_built | year the property was built | int64 |
     fips | geo code of property | int64 |
     county | county the property is in | object |
-    age | the difference between year_built and '2017 | int 64
+    age | the difference between year_built and 2017 | int 64
+    las_angeles | county name of geo code  | uint8 |
+    orange | county name of geo code | uint8 |
+    ventura | county name of geo code | uint8 |
+
 
 5. Project Planning
 
@@ -55,6 +59,7 @@ Preparation
     - encode categorical columns
     - renames columns
     - creates a columns for house 'age'
+    - scale data for exploration
 - Create a function that splits the data into 3 sets. train, validate, test
     - Split 20% (test data), 24% (validate data), and 56%(test data)
 - Create functions and save in prepare.py to be easily imported
@@ -68,6 +73,11 @@ Exploration
 - Document answers to questions as Takeaways
 
 Model
+- The baseline and 4 different models were created
+    - Linear Regression (OLS)
+    - LassoLars alpha = 1
+    - TweedieRegressor (GLM) power = 1
+    - 3rd degree Polynomial Regression
 
 Delivery
 - Report is saved in Jupyter Notebook
@@ -85,4 +95,12 @@ Delivery
 - Run zillow_final.ipynb
 
 7. Key Findings and takeaways
-- PENDING
+- 3rd degree Polynomial Regression was the top performing model
+- RMSE of 260,182.52 outperformed the baseline RMSE of 316,189.34
+    - Residual difference of 56,006.82 
+- Identified drivers of tax value as:
+    - Home square footage
+    - Number of bedrooms
+    - Number of bathrooms
+    - Lot size
+- More time is needed for increased column selection, better feature engineering, and increased model performance
