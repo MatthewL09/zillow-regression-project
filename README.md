@@ -27,7 +27,7 @@ PROJECT DETAILS FOR ZILLOW DATASET
     fips | geo code of property | int64 |
     county | county the property is in | object |
     age | the difference between year_built and 2017 | int 64
-    las_angeles | county name of geo code  | uint8 |
+    los_angeles | county name of geo code  | uint8 |
     orange | county name of geo code | uint8 |
     ventura | county name of geo code | uint8 |
 
